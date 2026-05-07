@@ -44,6 +44,8 @@ urlpatterns = [
    
     path('profile/', profile_view, name='profile'),
     path('profile/edit', profile_edit_view, name='profile-edit'),
+    
+    path('specialist/<pk>', specialist_view, name='specialist'),
    
 ]
 

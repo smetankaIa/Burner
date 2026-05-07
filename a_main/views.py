@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 
 from .models import *
-from a_specialist.models import Specialist
+from a_profile.models import Specialist
 from .forms import *
 
 import calendar

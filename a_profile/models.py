@@ -2,8 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime
 from django.utils.timezone import localdate
-from django.templatetags.static import static
-from django.db.models.functions import TruncDate
+
+import uuid
 
 # from datetime import timedelta
 
@@ -144,3 +144,34 @@ class Profile(models.Model):
 
 
 
+class Specialist(models.Model):
+    class Role(models.TextChoices):
+        DOCTOR = "Врач", "Врач"
+        COACH = (
+            "Тренер",
+            "Тренер",
+        )
+        ANOTHER = "Другое", "Другое"
+
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="specialist"
+    )
+    role = models.CharField(max_length=10, choices=Role.choices, default=Role.ANOTHER)
+    about = models.TextField(max_length=150, default="Специалист")
+    f_name = models.CharField(max_length=20, blank=True, default="Имя")
+    l_name = models.CharField(max_length=20, blank=True, default="Фамилия")
+    number = models.CharField(max_length=11, null=True)
+    social_tg = models.CharField(max_length=50, null=True)
+    email = models.CharField(max_length=100, null=True)
+    image = models.ImageField(upload_to="avatar/", null=True, blank=True)
+    id = models.CharField(max_length=100, default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    
+
+    class Meta:
+            
+            db_table = 'a_profile_specialist'
+            verbose_name = 'Специалист'
+            verbose_name_plural = 'Специалисты'
+            
+    def __str__(self):
+         return f'{self.role}: {self.f_name} {self.l_name}'

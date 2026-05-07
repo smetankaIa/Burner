@@ -21,9 +21,9 @@
       <div class="p-4 text-center">
         <h3 class="font-bold text-gray-800">{{ specialist.f_name }} {{ specialist.l_name }}</h3>
         <p class="text-sm text-[#835757] mb-3">{{ specialist.role }} </p>
-        <p class="text-sm text-[#835757] mb-3">{{ specialist.about }} </p>
-        <button
-          class="w-full py-2 rounded-xl bg-[#F6A5A5]/20 text-[#835757] font-bold text-sm hover:bg-[#F6A5A5]/40 transition">Связаться</button>
+        <p class="text-sm text-[#835757] mb-3">{{ specialist.about|truncatechars:10 }} </p>
+        <a href="{% url 'specialist' specialist.id %}"
+          class="w-full py-2 rounded-xl bg-[#F6A5A5]/20 text-[#835757] font-bold text-sm hover:bg-[#F6A5A5]/40 transition">Связаться</a>
       </div>
     </div>
     {% endfor %}

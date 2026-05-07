@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     
     'a_main',
     'a_profile',
-    'a_specialist',
+    
     
     'allauth',
     'allauth.account',

@@ -30,15 +30,7 @@ def profile_edit_view(request):
             print("ОШИБКИ ФОРМЫ:", form.errors) 
     return render(request, 'a_profile/profile_edit.html', {'form' : form})   
 
-# @login_required
-# def profile_stats_view(request):
-#     profile = request.user.profile
-#     if request.method == 'POST':
-#         new_goal = request.POST.get('goal')
-#         if new_goal in ['lose', 'maintain', 'gain']:
-#             profile.goal = new_goal
-#             profile.save() # Сохраняем в БД
-#             return redirect('profile-stats')
+def specialist_view(request, pk):
+    specialists = get_object_or_404(Specialist, id=pk)
     
-#     return render(request, 'a_profile/profile_stats.html', {'new_goal' : new_goal})
-
+    return render(request, 'a_profile/specialist.html', {'specialists' : specialists})
