@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<content x-data="{ mobileSidebarOpen: false }" class="grid grid-cols-3 max-w-7xl mx-auto my-6 px-6">
+    <mobileSidebarNav class="md:hidden col-span-full mx-auto mb-6 z-10 relative">
+        <a @click="mobileSidebarOpen = !mobileSidebarOpen" class="flex items-center cursor-pointer select-none font-bold hover:bg-gray-200 rounded-lg p-3">
+            <span>Categories</span>
+            <img x-bind:class="mobileSidebarOpen && 'rotate-180 duration-300'" class="w-4 ml-1.5" src="https://img.icons8.com/small/32/000000/expand-arrow.png" />
+        </a>
+    </mobileSidebarNav>
+  <main class="flex justify-center">
+    <div class="w-full max-w-[1600px] flex p-6">
+
+      <div class="flex-1 mr-[340px]">
+        {% include 'includes/daily.html' %}
+
+        {% include 'includes/curses.html' %}
+
+        {% include 'includes/specialist_list.html' %}
+
+        {% include 'includes/diet_list.html' %}
+
+      </div>
+
+      {% include 'includes/sidebar.html'%}
+
+    </div>
+  </main>
+
+  <script>
+    const courses = [
+      { title: "Тренер + Диетолог", desc: "Полное сопровождение: персональный план питания и программа тренировок с ежедневным контролем.", img: "img/course1.jpg" },
+      { title: "Личный коуч", desc: "Индивидуальные созвоны, мотивация и корректировка техники упражнений в реальном времени.", img: "img/course2.jpg" },
+      { title: "Smart Диетолог", desc: "Автоматизированная система подбора рациона на основе ваших анализов и предпочтений.", img: "img/course3.jpg" }
+    ];
+
+    let current = 0;
+
+    function updateCourse() {
+      const titleEl = document.getElementById("course-title");
+      const descEl = document.getElementById("course-desc");
+      const slideEl = document.getElementById("course-slide");
+
+      // Добавим простую анимацию затухания
+      slideEl.style.opacity = 0.8;
+      setTimeout(() => {
+        titleEl.innerText = courses[current].title;
+        descEl.innerText = courses[current].desc;
+        slideEl.style.backgroundImage = `url(${courses[current].img})`;
+        slideEl.style.opacity = 1;
+      }, 150);
+    }
+
+    function nextCourse() {
+      current = (current + 1) % courses.length;
+      updateCourse();
+    }
+
+    function prevCourse() {
+      current = (current - 1 + courses.length) % courses.length;
+      updateCourse();
+    }
+
+    // Инициализация
+    updateCourse();
+  </script>
+
+  <style>
+    /* Прячем скроллбар, но оставляем функционал */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+
+</content>  
+{% endblock %}

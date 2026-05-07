@@ -1,0 +1,28 @@
+<section class="mb-12">
+          <h2 class="text-white text-2xl font-bold mb-6 flex items-center gap-2">
+            Наши программы <span class="text-sm font-normal opacity-60">/ Рекомендовано вам</span>
+          </h2>
+
+          <div class="relative group">
+            <button onclick="prevCourse()"
+              class="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md transition">‹</button>
+            <button onclick="nextCourse()"
+              class="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md transition">›</button>
+
+            <div id="course-slide"
+              class="relative w-full h-[450px] rounded-[2rem] bg-[#835757] bg-cover bg-center flex items-end overflow-hidden transition-all duration-500 shadow-xl">
+
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+
+              <div class="relative z-10 p-10 text-white w-full">
+                <h3 id="course-title" class="text-4xl font-black mb-3">Тренер + Диетолог</h3>
+                <p id="course-desc" class="text-lg text-white/80 max-w-xl mb-6">Полное сопровождение: персональный план
+                  питания и программа тренировок с ежедневным контролем.</p>
+                <button
+                  class="bg-white text-[#835757] px-8 py-3 rounded-xl font-bold hover:scale-105 transition-transform">
+                  Подробнее о программе
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>

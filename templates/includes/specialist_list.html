@@ -1,0 +1,33 @@
+<section class="mb-12">
+  <h2 class="text-white text-2xl font-bold mb-6">Наши специалисты</h2>
+
+  <div class="flex gap-6 overflow-x-auto pb-4 no-scrollbar">
+
+    <div
+      class="bg-[#835757] text-white rounded-3xl p-6 min-w-[280px] flex flex-col items-center justify-center text-center border-2 border-dashed border-white/30 hover:border-white/60 transition cursor-pointer">
+      <div class="text-5xl mb-4 font-light">+</div>
+      <h3 class="text-xl font-bold mb-2">Пригласить своего</h3>
+      <p class="text-sm opacity-70 px-4">Добавьте своего тренера, чтобы он видел ваш прогресс</p>
+    </div>
+
+
+    {% for specialist in specialists  %}
+    <div class="bg-white rounded-3xl min-w-[220px] overflow-hidden shadow-lg hover:-translate-y-1 transition-transform">
+
+      {% if specialist.image %}
+      <img src="{{ specialist.image.url }}" class="w-full h-40 object-cover">
+      {% endif %}
+
+      <div class="p-4 text-center">
+        <h3 class="font-bold text-gray-800">{{ specialist.f_name }} {{ specialist.l_name }}</h3>
+        <p class="text-sm text-[#835757] mb-3">{{ specialist.role }} </p>
+        <p class="text-sm text-[#835757] mb-3">{{ specialist.about }} </p>
+        <button
+          class="w-full py-2 rounded-xl bg-[#F6A5A5]/20 text-[#835757] font-bold text-sm hover:bg-[#F6A5A5]/40 transition">Связаться</button>
+      </div>
+    </div>
+    {% endfor %}
+
+
+  </div>
+</section>

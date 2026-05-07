@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %} 
+
+{% block content %}
+<main class="max-w-2xl mx-auto p-6">
+    <div class="mb-6 flex items-center gap-4">
+        <a href="{% url 'profile' %}" class="text-white opacity-80 hover:opacity-100 transition text-2xl">←</a>
+        <h2 class="text-white text-2xl font-bold">Редактирование данных</h2>
+    </div>
+
+    <!-- ДОБАВЛЕН атрибут novalidate, чтобы браузер не блокировал отправку -->
+    <form method="POST" novalidate class="bg-[#835757] rounded-[2.5rem] p-8 text-white shadow-2xl space-y-6">
+        {% csrf_token %}
+
+        <!-- Общие ошибки -->
+        {% if form.non_field_errors %}
+        <div class="bg-red-500/20 text-red-100 p-4 rounded-2xl text-sm border border-red-500/30">
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+
+        <!-- Имя и Фамилия -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+                <label for="{{ form.f_name.id_for_label }}" class="text-xs uppercase font-bold opacity-70 ml-2">Имя</label>
+                <input type="text" name="f_name" id="{{ form.f_name.id_for_label }}"
+                       value="{{ form.f_name.value|default:'' }}"
+                       class="bg-white/10 border border-white/20 p-3 rounded-2xl outline-none focus:ring-2 focus:ring-white/50 transition">
+                {% if form.f_name.errors %}<p class="text-red-300 text-[10px] ml-2">{{ form.f_name.errors.0 }}</p>{% endif %}
+            </div>
+            
+            <div class="flex flex-col gap-2">
+                <label for="{{ form.l_name.id_for_label }}" class="text-xs uppercase font-bold opacity-70 ml-2">Фамилия</label>
+                <input type="text" name="l_name" id="{{ form.l_name.id_for_label }}"
+                       value="{{ form.l_name.value|default:'' }}"
+                       class="bg-white/10 border border-white/20 p-3 rounded-2xl outline-none focus:ring-2 focus:ring-white/50 transition">
+                {% if form.l_name.errors %}<p class="text-red-300 text-[10px] ml-2">{{ form.l_name.errors.0 }}</p>{% endif %}
+            </div>
+        </div>
+
+        <!-- Пол (Выпадающий список) -->
+        <div class="flex flex-col gap-2">
+            <label for="{{ form.male.id_for_label }}" class="text-xs uppercase font-bold opacity-70 ml-2">Пол</label>
+            <div class="relative">
+                <select name="male" id="{{ form.male.id_for_label }}"
+                        class="w-full bg-white/10 border border-white/20 p-3 rounded-2xl outline-none focus:ring-2 focus:ring-white/50 transition appearance-none cursor-pointer">
+                    {% for value, text in form.male.field.choices %}
+                    <!-- ИСПРАВЛЕНО: оператор == и приведение к строке -->
+                    <option value="{{ value }}" class="text-black" {% if form.male.value|stringformat:"s" == value|stringformat:"s" %} selected {% endif %}>
+                        {{ text }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">▼</div>
+            </div>
+            {% if form.male.errors %}<p class="text-red-300 text-[10px] ml-2">{{ form.male.errors.0 }}</p>{% endif %}
+        </div>
+
+        <!-- Дата рождения -->
+        <div class="flex flex-col gap-2">
+            <label for="{{ form.dete_birth.id_for_label }}" class="text-xs uppercase font-bold opacity-70 ml-2">Дата рождения</label>
+            <input type="date" name="dete_birth" id="{{ form.dete_birth.id_for_label }}"
+                   value="{{ form.dete_birth.value|date:'Y-m-d'|default:'' }}"
+                   class="bg-white/10 border border-white/20 p-3 rounded-2xl outline-none focus:ring-2 focus:ring-white/50 transition [color-scheme:dark]">
+            {% if form.dete_birth.errors %}<p class="text-red-300 text-[10px] ml-2">{{ form.dete_birth.errors.0 }}</p>{% endif %}
+        </div>
+
+        <!-- Цель -->
+        <div class="flex flex-col gap-2">
+            <label for="{{ form.goal.id_for_label }}" class="text-xs uppercase font-bold opacity-70 ml-2">Цель</label>
+            <div class="relative">
+                <select name="goal" id="{{ form.goal.id_for_label }}"
+                        class="w-full bg-white/10 border border-white/20 p-3 rounded-2xl outline-none focus:ring-2 focus:ring-white/50 transition appearance-none cursor-pointer">
+                    {% for value, text in form.goal.field.choices %}
+                    <!-- ИСПРАВЛЕНО: проверяем form.goal.value вместо male, оператор == и приведение к строке -->
+                    <option value="{{ value }}" class="text-black" {% if form.goal.value|stringformat:"s" == value|stringformat:"s" %} selected {% endif %}>
+                        {{ text }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">▼</div>
+            </div>
+            {% if form.goal.errors %}<p class="text-red-300 text-[10px] ml-2">{{ form.goal.errors.0 }}</p>{% endif %}
+        </div>
+        <!-- Активность -->
+         <div class="flex flex-col gap-2">
+            <label for="{{ form.activity.id_for_label }}" class="text-xs uppercase font-bold opacity-70 ml-2">Цель</label>
+            <div class="relative">
+                <select name="activity" id="{{ form.activity.id_for_label }}"
+                        class="w-full bg-white/10 border border-white/20 p-3 rounded-2xl outline-none focus:ring-2 focus:ring-white/50 transition appearance-none cursor-pointer">
+                    {% for value, text in form.activity.field.choices %}
+                    <!-- ИСПРАВЛЕНО: проверяем form.goal.value вместо male, оператор == и приведение к строке -->
+                    <option value="{{ value }}" class="text-black" {% if form.activity.value|stringformat:"s" == value|stringformat:"s" %} selected {% endif %}>
+                        {{ text }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">▼</div>
+            </div>
+            {% if form.activity.errors %}<p class="text-red-300 text-[10px] ml-2">{{ form.activity.errors.0 }}</p>{% endif %}
+        </div>
+
+        <!-- Рост и Вес -->
+        <div class="grid grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+                <label for="{{ form.height.id_for_label }}" class="text-xs uppercase font-bold opacity-70 ml-2">Рост (см)</label>
+                <input type="number" step="0.1" name="height" id="{{ form.height.id_for_label }}"
+                       value="{{ form.height.value|stringformat:'s'|default:'' }}"
+                       class="bg-white/10 border border-white/20 p-3 rounded-2xl outline-none focus:ring-2 focus:ring-white/50 transition text-2xl font-black">
+                {% if form.height.errors %}<p class="text-red-300 text-[10px] ml-2">{{ form.height.errors.0 }}</p>{% endif %}
+            </div>
+            
+            <div class="flex flex-col gap-2">
+                <label for="{{ form.weight.id_for_label }}" class="text-xs uppercase font-bold opacity-70 ml-2">Вес (кг)</label>
+                <input type="number" step="0.1" name="weight" id="{{ form.weight.id_for_label }}"
+                       value="{{ form.weight.value|stringformat:'s'|default:'' }}"
+                       class="bg-white/10 border border-white/20 p-3 rounded-2xl outline-none focus:ring-2 focus:ring-white/50 transition text-2xl font-black">
+                {% if form.weight.errors %}<p class="text-red-300 text-[10px] ml-2">{{ form.weight.errors.0 }}</p>{% endif %}
+            </div>
+        </div>
+
+        <div class="pt-6 flex flex-col gap-3">
+            <button type="submit"
+                    class="w-full bg-white text-[#835757] py-4 rounded-2xl font-black text-lg hover:scale-[1.02] active:scale-95 transition shadow-xl">
+                Сохранить изменения
+            </button>
+            <a href="{% url 'profile' %}"
+               class="w-full text-center py-2 opacity-60 hover:opacity-100 transition text-sm font-bold">
+                Отменить
+            </a>
+        </div>
+    </form>
+</main>
+{% endblock %}

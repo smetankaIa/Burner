@@ -1,0 +1,65 @@
+{% load static %}
+<header class="flex justify-between items-center bg-[#835757] text-white px-6 py-3 sticky top-0 z-50 shadow-md">
+  <a href="/" class="flex items-center gap-2 hover:opacity-80 transition group">
+    <img src="{% static 'images/logo.svg' %}" class="w-8 transition-transform group-hover:scale-110" alt="Logo">
+    <h1 class="text-lg font-bold tracking-tight">Burner</h1>
+  </a>
+
+  <nav class="flex items-center gap-3">
+    {% if user.is_authenticated %}
+
+    <a href="{% url 'nutricion'  %}" class="hover:bg-[#573a3a] px-4 py-2 rounded-lg transition font-medium">Дневник
+      питания</a>
+    <a href="{% url 'workout' %}" class="hover:bg-[#573a3a] px-4 py-2 rounded-lg transition font-medium">Тренировки</a>
+
+    <div class="relative group py-2 ml-2 border-l border-white/20 pl-4">
+      <div class="flex items-center gap-2 cursor-pointer">
+        {% if user.profile %}
+        <div
+          class="w-8 h-8 rounded-full bg-white text-[#835757] flex items-center justify-center font-bold shadow-inner">
+          {{ user.profile.f_name.0}}
+        </div>
+        
+        <span class="hidden sm:inline font-medium">{{ user.profile.f_name }} <small class="opacity-70">▼</small></span>
+        {% else %}
+        <div
+          class="w-8 h-8 rounded-full bg-white text-[#835757] flex items-center justify-center font-bold shadow-inner">
+          {{ user.username.0}}
+        </div>
+        <span class="hidden sm:inline font-medium">{{ user.username }} <small class="opacity-70">▼</small></span>
+        {% endif %}
+      </div>
+
+      <ul class="absolute right-0 mt-2 w-48 bg-[#835757] rounded-xl p-2 shadow-2xl border border-white/10 
+                 opacity-0 invisible translate-y-2 
+                 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 
+                 transition-all duration-200 ease-out z-[100]">
+        <li>
+          <a href="{% url 'profile'  %}"
+            class="flex items-center px-3 py-2 hover:bg-[#573a3a] rounded-lg transition text-sm">
+            👤 Мой профиль
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'profile-edit' %}" class="flex items-center px-3 py-2 hover:bg-[#573a3a] rounded-lg transition text-sm">
+            ✏️ Изменить профиль
+          </a>
+        </li>
+        <li class="mt-1 pt-1 border-t border-white/10">
+          <a href="{% url 'account_logout' %}"
+            class="flex items-center px-3 py-2 hover:bg-red-500/20 rounded-lg transition text-sm text-red-300">
+            🚪 Выйти
+          </a>
+        </li>
+        {% else %}
+
+        <a href="{% url 'account_login' %}"
+          class="bg-white/10 text-white px-4 py-2 rounded-xl font-medium hover:bg-white/20 transition">Войти</a>
+        <a href="{% url 'account_signup' %}"
+          class="bg-white/20 text-white px-4 py-2 rounded-xl font-bold hover:bg-white/30 transition shadow-md">Регистрация</a>
+
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,120 @@
+<aside class="w-[320px] fixed right-0 top-[68px] h-[calc(100vh-68px)] p-6 overflow-y-auto">
+
+        <div class="bg-[#835757] p-6 rounded-[2.5rem] text-white shadow-2xl">
+
+          <div class="flex justify-between items-center mb-8">
+            <h3 class="text-xl font-bold">Обзор дня</h3>
+            <span class="bg-white/10 px-3 py-1 rounded-lg text-sm opacity-80">{% now "j E" %}</span>
+          </div>
+
+          <div class="flex justify-center mb-10">
+            <div class="w-40 h-40 flex flex-col items-center justify-center relative">
+                <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="7" fill="transparent" class="text-white/10" />
+                    <!-- Динамическое заполнение кольца калорий -->
+                    <!-- Предположим, норма калорий 2200. Можно заменить на {{ user.profile.target_calories }} -->
+                    <circle cx="50" cy="50" r="45" stroke="white" stroke-width="7" fill="transparent"
+                            stroke-dasharray="282.7" stroke-linecap="round" class="transition-all duration-1000"
+                            style="stroke-dashoffset: calc(282.7 - (282.7 * {{ user.profile.today_totals.cals|stringformat:"s" }} / 2200));" />
+                </svg>
+                <div class="relative z-10 text-center">
+                    <span class="text-4xl font-black block">{{ user.profile.today_totals.cals|default:"0" }}</span>
+                    <span class="text-[10px] uppercase tracking-widest opacity-60 font-bold">ккал</span>
+                </div>
+            </div>
+        </div>
+
+          <div class="grid grid-cols-3 gap-4">
+            <!-- БЕЛКИ -->
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-16 h-16 flex items-center justify-center relative">
+                    <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="8" fill="transparent" class="text-white/10" />
+                        <!-- Норма белка для примера 120 -->
+                        <circle cx="50" cy="50" r="42" stroke="#93c5fd" stroke-width="8" fill="transparent"
+                                stroke-dasharray="263.9" stroke-linecap="round"
+                                style="stroke-dashoffset: calc(263.9 - (263.9 * {{ user.profile.today_totals.prot|stringformat:"s" }} / 120));" />
+                    </svg>
+                    <span class="text-xs font-bold relative z-10">{{ user.profile.today_totals.prot|default:"0" }}г</span>
+                </div>
+                <span class="text-[10px] uppercase font-bold opacity-60 tracking-wider">Белки</span>
+            </div>
+
+            <!-- ЖИРЫ -->
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-16 h-16 flex items-center justify-center relative">
+                    <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="8" fill="transparent" class="text-white/10" />
+                        <!-- Норма жиров для примера 60 -->
+                        <circle cx="50" cy="50" r="42" stroke="#fde047" stroke-width="8" fill="transparent"
+                                stroke-dasharray="263.9" stroke-linecap="round"
+                                style="stroke-dashoffset: calc(263.9 - (263.9 * {{ user.profile.today_totals.fat|stringformat:"s" }} / 60));" />
+                    </svg>
+                    <span class="text-xs font-bold relative z-10">{{ user.profile.today_totals.fat|default:"0" }}г</span>
+                </div>
+                <span class="text-[10px] uppercase font-bold opacity-60 tracking-wider">Жиры</span>
+            </div>
+
+            <!-- УГЛЕВОДЫ -->
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-16 h-16 flex items-center justify-center relative">
+                    <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="8" fill="transparent" class="text-white/10" />
+                        <!-- Норма углеводов для примера 200 -->
+                        <circle cx="50" cy="50" r="42" stroke="#6ee7b7" stroke-width="8" fill="transparent"
+                                stroke-dasharray="263.9" stroke-linecap="round"
+                                style="stroke-dashoffset: calc(263.9 - (263.9 * {{ user.profile.today_totals.carbs|stringformat:"s" }} / 200));" />
+                    </svg>
+                    <span class="text-xs font-bold relative z-10">{{ user.profile.today_totals.carbs|default:"0" }}г</span>
+                </div>
+                <span class="text-[10px] uppercase font-bold opacity-60 tracking-wider">Угл.</span>
+            </div>
+        </div>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-[2rem] text-white mt-8">
+    
+    <h3 class="font-bold mb-4 flex items-center gap-2">
+        {% if user.profile.today_workout %}
+            <!-- Зеленая пульсирующая точка, если есть тренировка -->
+            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.8)]"></span>
+            Ближайшая активность
+        {% else %}
+            <!-- Серая точка, если отдых -->
+            <span class="w-2 h-2 bg-white/40 rounded-full"></span>
+            Тренировки
+        {% endif %}
+    </h3>
+
+    {% if user.profile.today_workout %}
+        <!-- ==== ВАРИАНТ 1: ТРЕНИРОВКА ЕСТЬ ==== -->
+        <div class="mb-4">
+            <p class="text-2xl font-bold">{{ user.profile.today_workout.type }}</p>
+            <p class="opacity-70 text-sm italic">{{ user.profile.today_workout.duration }} мин.</p>
+        </div>
+        <div class="flex justify-between items-center mt-4">
+            <span class="text-sm font-bold bg-white/20 px-3 py-1.5 rounded-lg border border-white/10">
+                🕒 {{ user.profile.today_workout.date|date:"H:i" }}
+            </span>
+            <!-- Замени 'calendar_view' на name твоего url календаря -->
+            <a href="{% url 'workout' %}" class="bg-white text-[#835757] px-4 py-2 rounded-xl font-bold text-sm hover:scale-105 transition shadow-lg">
+                Открыть
+            </a>
+        </div>
+
+    {% else %}
+        <!-- ==== ВАРИАНТ 2: ТРЕНИРОВКИ НЕТ ==== -->
+        <div class="text-center py-4">
+            <p class="text-4xl mb-2 opacity-50">🛋</p>
+            <p class="font-bold opacity-80 text-lg">День отдыха</p>
+            <p class="text-xs opacity-60 mt-1">Мышцы тоже нуждаются в покое</p>
+        </div>
+        <!-- Кнопка, ведущая на календарь -->
+        <a href="{% url 'workout' %}" class="mt-4 block text-center w-full bg-transparent border border-white/30 text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-white hover:text-[#835757] transition">
+            + Запланировать
+        </a>
+    {% endif %}
+
+</div>
+
+      </aside>

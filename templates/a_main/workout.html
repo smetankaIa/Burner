@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="max-w-6xl mx-auto p-4 sm:p-6 mt-4 lg:mt-8 flex flex-col lg:flex-row gap-8 items-start">
+    
+    <!-- ================= ЛЕВАЯ ЧАСТЬ: КАЛЕНДАРЬ ================= -->
+    <div class="w-full lg:w-2/3 bg-[#835757] rounded-[2.5rem] p-6 sm:p-8 text-white shadow-2xl border border-white/10 relative overflow-hidden">
+        
+        <!-- Шапка календаря -->
+        <div class="flex justify-between items-center mb-8 relative z-10">
+            <div>
+                <h1 class="text-3xl font-black tracking-tight">Календарь</h1>
+                <p class="text-lg opacity-80 mt-1 font-medium">{{ current_month_name }}</p> 
+            </div>
+            
+            <div class="flex gap-2">
+                <a href="?year={{ prev_year }}&month={{ prev_month }}" 
+                   class="w-11 h-11 bg-white/10 rounded-2xl flex items-center justify-center hover:bg-white/20 transition-all active:scale-90 border border-white/5">
+                   <span class="text-xl">←</span>
+                </a>
+                <a href="?year={{ next_year }}&month={{ next_month }}" 
+                   class="w-11 h-11 bg-white/10 rounded-2xl flex items-center justify-center hover:bg-white/20 transition-all active:scale-90 border border-white/5">
+                   <span class="text-xl">→</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Дни недели -->
+        <div class="grid grid-cols-7 gap-2 mb-4 text-center text-[10px] sm:text-xs font-black opacity-50 uppercase tracking-[0.2em] relative z-10">
+            <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
+        </div>
+
+        <!-- Сетка дней -->
+        <div class="grid grid-cols-7 gap-2 sm:gap-4 relative z-10">
+            {% for week in calendar_grid %}
+                {% for data in week %}
+                    {% if data.day == 0 %}
+                        <!-- Пустое пространство -->
+                        <div class="aspect-square"></div>
+                    {% else %}
+                        
+                        <!-- Плитка дня -->
+                        <div class="relative group">
+                            {% if data.workout %}
+                                <!-- ДЕНЬ С ТРЕНИРОВКОЙ (Клик ведет на редактирование) url 'workout-edit' data.workout.id  -->
+                                <a href="{%url 'workout-edit' data.workout.id %}" 
+                                   class="aspect-square rounded-2xl sm:rounded-[1.5rem] flex flex-col items-center justify-center p-1 transition-all duration-300 shadow-lg border-2 
+                                   {% if data.is_today %} border-white bg-green-500 {% else %} border-green-400/30 bg-green-400/10 hover:bg-green-400/20 {% endif %}">
+                                    <span class="text-sm sm:text-lg font-black">{{ data.day }}</span>
+                                    <span class="text-[8px] sm:text-[10px] font-bold mt-1 opacity-80 truncate w-full text-center px-1">
+                                        {{ data.workout.type }}
+                                    </span>
+                                </a>
+                            {% elif data.is_today %}
+                                <!-- СЕГОДНЯ (Но без тренировки) -->
+                                <a href=" {% url 'workout-add' %}" 
+                                   class="aspect-square bg-white text-[#835757] rounded-2xl sm:rounded-[1.5rem] flex flex-col items-center justify-center p-1 hover:scale-105 transition-all shadow-xl">
+                                    <span class="text-lg sm:text-2xl font-black">{{ data.day }}</span>
+                                    <span class="text-[8px] sm:text-[10px] font-bold uppercase">Тут</span>
+                                </a>
+                            {% else %}
+                                <!-- ОБЫЧНЫЙ ПУСТОЙ ДЕНЬ -->
+                                <a href="{% url 'workout-add'  %}" 
+                                   class="aspect-square bg-white/5 border border-white/10 rounded-2xl sm:rounded-[1.5rem] flex flex-col items-center justify-center p-1 hover:bg-white/10 hover:border-white/30 transition-all group/day">
+                                    <span class="text-sm sm:text-lg font-bold opacity-60 group-hover/day:opacity-100">{{ data.day }}</span>
+                                    <span class="text-xs opacity-0 group-hover/day:opacity-100 transition-opacity mt-1">+</span>
+                                </a>
+                            {% endif %}
+                        </div>
+
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ================= ПРАВАЯ ЧАСТЬ: УПРАВЛЕНИЕ ================= -->
+    <div class="w-full lg:w-1/3 space-y-6">
+        
+        <!-- БЛОК 1: Статус дня / Детали -->
+        <div class="bg-white/10 backdrop-blur-md rounded-[2.5rem] p-6 sm:p-8 text-white border border-white/20 shadow-xl">
+            {% if edit_mode %}
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h2 class="text-2xl font-black">Редактирование</h2>
+                        <p class="text-sm opacity-60">Запись #{{ workout.id }}</p>
+                    </div>
+                    <!-- КНОПКА УДАЛЕНИЯ -->
+                    <form action="{% url 'workout-delete' %}" method="POST" onsubmit="return confirm('Удалить эту тренировку?')">
+                        {% csrf_token %}
+                        <button type="submit" class="w-12 h-12 bg-red-500/20 text-red-300 rounded-2xl flex items-center justify-center hover:bg-red-500 hover:text-white transition-all border border-red-500/30">
+                            🗑
+                        </button>
+                    </form>
+                </div>
+            {% else %}
+                <h2 class="text-2xl font-black mb-6">Сегодня</h2>
+                {% if today_workout %}
+                    <div class="bg-white/10 rounded-3xl p-5 border border-white/10 mb-2">
+                        <p class="text-xl font-bold">{{ today_workout.type }}</p>
+                        <div class="flex gap-4 mt-2 text-xs font-bold opacity-70 uppercase tracking-widest">
+                            <span>⏱ {{ today_workout.duration }} мин</span>
+                            <span>🕒 {{ today_workout.date|date:"H:i" }}</span>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <span class="text-5xl block mb-2">🔋</span>
+                        <p class="font-bold opacity-70 italic">День восстановления</p>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <!-- Тренер -->
+         
+    </div>
+
+</main>
+
+<!-- Небольшой CSS для корректного отображения календаря на мобилках -->
+<style>
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+        filter: invert(1); /* Делает иконку календаря белой */
+    }
+</style>
+{% endblock %}

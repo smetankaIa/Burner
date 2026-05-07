@@ -1,0 +1,101 @@
+{% extends 'layouts/b.html' %}
+{% load static %}
+{% block content %}
+<main class="max-w-xl mx-auto p-6 mt-8">
+  <div class="bg-[#835757] rounded-[2.5rem] p-8 text-white shadow-2xl border border-white/10 relative overflow-hidden">
+
+    <!-- Блок с аватаром (Базовый) -->
+    <div class="flex flex-col items-left mb-8 relative z-10">
+      <div class="relative mb-4">
+        {% if user.profile %}
+        <div
+          class="w-28 h-28 rounded-full bg-white text-[#835757] flex items-center justify-center text-5xl font-black shadow-inner">
+          {{ user.profile.f_name.0}}
+        </div>
+        {% else %}
+        <div
+          class="w-28 h-28 rounded-full bg-white text-[#835757] flex items-center justify-center text-5xl font-black shadow-inner">
+          {{ user.username.0}}
+          
+        </div>
+        {% endif %}
+      </div>
+      {% if user.profile.f_name == 'Имя' %}
+      <h2 class="text-3xl font-bold">{{ user.username }}</h2>
+      <a href="{% url 'profile-edit' %}" class="text-1xl font-bold ">Вы можете добавить имя в Настройках профиля</a>
+      {% else %}
+      <h2 class="text-3xl font-bold">{{ profile.f_name }} {{profile.l_name}}</h2>
+      {% endif %}
+      <p class="opacity-80 text-lg mt-1">{{ user.email }}</p>
+      <h1 class="text-2xl font-bold ">Мои параметры</h1>
+      {% if profile.male == 'Не указан' and profile.height == 0.0 and profile.weight == 0.0 %}
+      <a href="{% url 'profile-edit' %}" class="text-1xl font-bold ">Добавьте больше информации в Настройках профиля</a>
+      <p class="text-1xl ">Пол: {{profile.male}}</p>
+      <p class="text-1xl ">Рост: {{profile.height}}</p>
+      <p class="text-1xl ">Вес: {{profile.weight}}</p>
+      <p class="text-1xl ">Возраст: {{profile.age}}</p>
+      <p class="text-1xl ">Цель: {{profile.goal}}</p>
+      
+
+      {% else %}
+      <p class="text-1xl ">Пол: {{profile.male}}</p>
+      <p class="text-1xl ">Рост: {{profile.height}}</p>
+      <p class="text-1xl ">Вес: {{profile.weight}}</p>
+      <p class="text-1xl ">Возраст: {{profile.age}}</p>
+      <p class="text-1xl ">Цель: {{profile.goal}}</p>
+      
+      {% endif %}
+    </div>
+
+    <!-- Карточка неактивной подписки -->
+
+    <div
+      class="bg-white/10 rounded-3xl p-5 flex flex-col sm:flex-row items-center justify-between mb-8 shadow-inner border border-white/20 relative z-10 gap-4">
+      <div class="flex items-center gap-4 text-center sm:text-left">
+        <img src="{% static 'images/burnerplus.svg' %}" class="w-8 transition-transform group-hover:scale-110"
+          alt="Logo">
+        <div>
+          <h3 class="font-bold text-lg opacity-90">Подписка Burner+</h3>
+          <p class="text-sm text-white/70">Получите доступ ко всем функциям</p>
+        </div>
+      </div>
+      <button
+        class="bg-white text-[#835757] px-6 py-3 rounded-xl font-bold text-sm hover:scale-105 active:scale-95 transition shadow-md w-full sm:w-auto">
+        Оформить
+      </button>
+    </div>
+
+
+    <!-- Меню настроек -->
+    <div class="space-y-3 relative z-10">
+      <a href="{% url 'profile-edit' %}"
+        class="flex items-center justify-between bg-white/10 p-5 rounded-2xl hover:bg-white/20 transition group">
+        <div class="flex items-center gap-3">
+          <span class="text-xl">⚙️</span>
+          <span class="font-bold text-lg">Настройки профиля</span>
+        </div>
+        <span class="group-hover:translate-x-1 transition-transform">→</span>
+      </a>
+
+      
+
+      <a href="{% url 'account_logout' %}"
+        class="flex items-center justify-between bg-white/10 p-5 rounded-2xl hover:bg-white/20 transition group text-red-200 hover:text-red-100">
+        <div class="flex items-center gap-3">
+          <span class="text-xl">🚪</span>
+          <span class="font-bold text-lg">Выйти из аккаунта</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Кнопка удаления аккаунта -->
+    <div class="mt-8 pt-6 border-t border-white/10 relative z-10">
+      <a href="profile-delete.html"
+        class="flex items-center justify-center gap-3 w-full bg-red-900/40 text-red-200 py-4 rounded-2xl font-bold text-lg hover:bg-red-600 hover:text-white transition border border-red-500/30 shadow-inner group">
+        <span class="group-hover:scale-110 transition-transform">⚠️</span>
+        Удалить аккаунт
+      </a>
+    </div>
+  </div>
+</main>
+{% endblock %}
